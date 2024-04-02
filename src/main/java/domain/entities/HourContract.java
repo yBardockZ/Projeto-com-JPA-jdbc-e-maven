@@ -3,12 +3,34 @@ package domain.entities;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "hour_contract")
 public class HourContract {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_hour_contract")
 	private Integer id;
+	
 	private LocalDate date;
+	
+	@Column(name = "value_per_hour")
 	private Double valuePerHour;
+	
 	private Integer hours;
+	
+	@ManyToOne
+	@JoinColumn(name = "worker")
+	private Worker worker;
 
 	public HourContract() {
 	}
@@ -51,13 +73,21 @@ public class HourContract {
 		this.hours = hours;
 	}
 	
+	public Worker getWorker() {
+		return worker;
+	}
+
 	public Double getTotalValue() {
 		return valuePerHour * hours;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	public void setWorker(Worker worker) {
+		this.worker = worker;
 	}
 
 	@Override

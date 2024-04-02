@@ -1,20 +1,48 @@
 package domain.entities;
 
+import java.io.Serializable;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import domain.enums.WorkerLevel;
 
-public class Worker {
+@Entity
+@Table(name = "workers")
+public class Worker implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_worker")
 	private Integer id;
+	
 	private String name;
+	
+	@Enumerated(value =  EnumType.STRING)
 	private WorkerLevel level;
+	
 	private Double baseSalary;
 	
+	@OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
 	List<HourContract> contracts = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "iddepartment")
 	Department department;
 
 	public Worker() {
