@@ -16,7 +16,10 @@ import domain.entities.Worker;
 import domain.enums.WorkerLevel;
 
 public class Program {
-
+	
+	public static final String RESET = "\u001B[0m";
+	public static final String BG_BLACK = "\u001B[40m";
+	public static final String GREEN = "\u001B[32m";
 	private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistenceUN");
 	private static EntityManager em = emf.createEntityManager();
 	private static Scanner sc = new Scanner(System.in);
@@ -43,7 +46,23 @@ public class Program {
 
 			switch (opcao) {
 			case 1:
-					System.out.println("show");
+				
+				try {
+					
+				em.getTransaction().begin();
+				
+				
+				List<Worker> workers = em.createQuery("SELECT w FROM Worker w", Worker.class).getResultList();
+				
+				workers.forEach(x -> System.out.println("\n" + BG_BLACK + GREEN + x + RESET));
+				
+				em.getTransaction().commit();
+				
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				} 
+				
 					
 				break;
 
@@ -123,16 +142,15 @@ public class Program {
 				break;
 
 			case 3:
-				System.out.println("Você escolheu a opção 3.");
-
+				
 				break;
 
 			case 4:
-				System.out.println("Saindo...");
+				System.out.println("Leaving...");
 				break;
 
 			default:
-				System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
+				System.out.println("Invalid option. Please, try again.");
 			}
 
 		} while (opcao != 4);

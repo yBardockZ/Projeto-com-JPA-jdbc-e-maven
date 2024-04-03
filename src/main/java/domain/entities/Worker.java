@@ -144,8 +144,8 @@ public class Worker implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Worker [id=" + id + ", name=" + name + ", level=" + level + ", baseSalary=" + baseSalary
-				+ ", contracts=" + contracts + ", department=" + department + "]";
+		return "id: " + id + ", name: " + name + ", level: " + level + ", baseSalary: " + baseSalary
+				+ ", contracts: " + contracts+ ", department: " + department;
 	}
 	
 	
