@@ -1,6 +1,7 @@
 package domain.application;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Scanner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+import org.hibernate.ObjectNotFoundException;
 
 import domain.entities.Department;
 import domain.entities.HourContract;
@@ -142,6 +145,39 @@ public class Program {
 				break;
 
 			case 3:
+				
+				try {
+					DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MM/yyyy");
+					
+					System.out.print("\nWorker id: ");
+					int workerId = sc.nextInt();
+					sc.nextLine();
+					
+					em.getTransaction().begin();
+					
+					Worker worker = em.find(Worker.class, workerId);
+					
+					em.getTransaction().commit();
+					
+					if (worker != null) {
+						System.out.print("Enter month and year (mm/yyyy): ");
+						String ymStr = sc.nextLine();
+						YearMonth yearMonth = YearMonth.parse(ymStr, fmt);
+						
+						Double income = worker.income(yearMonth.getYear(), yearMonth.getMonthValue());
+						
+						System.out.println("Income for " + fmt.format(yearMonth) + " of " + worker.getName() + ": " + String.format("%.2f", income));
+						
+					}
+					else {
+						throw new ObjectNotFoundException(worker, "worker : " + workerId + " not exist.");
+					}
+					
+
+				}  catch (Exception e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
 				
 				break;
 
